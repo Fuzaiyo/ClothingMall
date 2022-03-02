@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/mvc
+    https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!--    扫描controller层，别的层扫也不是springmvc扫，是给appcontext那个文件来扫-->
+    <context:component-scan base-package="com.fuzaiyo.controller"/>
+
+
+    <!--  注解驱动：自动配置处理映射器和处理适配器，底层包括返回json配置-->
+    <mvc:annotation-driven/>
+
+
+    <!--配置内部资源视图解析器-->
+    <bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <!--开放静态资源的访问：springmvc找不到对应的请求映射地址就交给tomcat去找相应的静态资源如css等，帮你返回-->
+    <mvc:default-servlet-handler/>
+<!--    <mvc:resources mapping="/**" location="WEB-INF/"-->
+
+
+<!--    拦截器配置-->
+        <mvc:interceptors>
+            <mvc:interceptor>
+                <!--        配置对哪些资源执行拦截操作-->
+                <mvc:mapping path="/**"/>
+                <!--        配置对哪些资源不进行拦截操作-->
+                <mvc:exclude-mapping path="/user/login"/>
+                <bean class="com.fuzaiyo.interceptor.LoginInterceptor"></bean>
+            </mvc:interceptor>
+        </mvc:interceptors>
+
+
+</beans>
